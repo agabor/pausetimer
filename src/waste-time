@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sudo echo
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <website> <minutes>"
+    echo "Example: $0 facebook.com 10"
+    exit 1
+fi
+
+sudo nohup sudo waste-time-sync "$1" "$2" 2>&1 | tee &
