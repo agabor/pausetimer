@@ -1,0 +1,72 @@
+#!/bin/bash
+
+sudo echo
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <website> <minutes>"
+    echo "Example: $0 facebook.com 10"
+    exit 1
+fi
+
+HOSTS_FILE="/etc/hosts"
+WEBSITE=$1
+WWW_WEBSITE="www.$WEBSITE"
+MINUTES=$2
+TEMP_UNBLOCK_TIME=$((MINUTES * 60))
+REDIRECT_IP="127.0.0.1"
+
+block_website() {
+    if ! grep -q "$WEBSITE" "$HOSTS_FILE"; then
+        echo "$REDIRECT_IP $WEBSITE" | tee -a "$HOSTS_FILE"
+        echo "$WEBSITE has been blocked."
+    else
+        echo "$WEBSITE is already blocked."
+    fi
+
+    if ! grep -q "$WWW_WEBSITE" "$HOSTS_FILE"; then
+        echo "$REDIRECT_IP $WWW_WEBSITE" | tee -a "$HOSTS_FILE"
+        echo "$WWW_WEBSITE has been blocked."
+    else
+        echo "$WWW_WEBSITE is already blocked."
+    fi
+
+    # Flush DNS cache
+    flush_dns_cache
+}
+
+unblock_website() {
+    if grep -q "$WEBSITE" "$HOSTS_FILE"; then
+        sed -i '' "/$WEBSITE/d" "$HOSTS_FILE"
+        echo "$WEBSITE has been unblocked for $MINUTES minutes."
+    else
+        echo "$WEBSITE is not blocked."
+    fi
+
+    if grep -q "$WWW_WEBSITE" "$HOSTS_FILE"; then
+        sed -i '' "/$WWW_WEBSITE/d" "$HOSTS_FILE"
+        echo "$WWW_WEBSITE has been unblocked for $MINUTES minutes."
+    else
+        echo "$WWW_WEBSITE is not blocked."
+    fi
+
+    # Flush DNS cache
+    flush_dns_cache
+}
+
+flush_dns_cache() {
+    killall -HUP mDNSResponder
+    echo "DNS cache flushed."
+}
+
+echo "Temporarily unblocking $WEBSITE and $WWW_WEBSITE for $MINUTES minutes..."
+
+unblock_website
+
+reblock_time=$(date -v+${MINUTES}M +"%Y-%m-%d %H:%M:%S")
+echo "The website will be re-blocked at: $reblock_time"
+
+sleep $TEMP_UNBLOCK_TIME
+
+block_website
+
+exit 0
