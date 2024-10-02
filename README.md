@@ -1,8 +1,3 @@
----
-layout: default
-title: Home
----
-
 # Welcome to My GitHub Pages Site!
 
 This is a sample website created using GitHub Pages and the Cayman theme.
