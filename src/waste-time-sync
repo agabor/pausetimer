@@ -27,7 +27,6 @@ block_website() {
         echo "$WWW_WEBSITE is already blocked."
     fi
 
-    # Flush DNS cache
     flush_dns_cache
 }
 
@@ -46,7 +45,6 @@ unblock_website() {
         echo "$WWW_WEBSITE is not blocked."
     fi
 
-    # Flush DNS cache
     flush_dns_cache
 }
 
