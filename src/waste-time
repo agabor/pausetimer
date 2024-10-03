@@ -31,6 +31,6 @@ if [ $# -lt 2 ]; then
    show_help
 fi
 
-sudo -k echo
+sudo echo
 
 sudo nohup sudo waste-time-sync "$1" "$2" 2>&1 | tee &
