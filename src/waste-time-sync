@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ $# -ne 2 ]; then
+    echo "Usage: $(basename "$0") <website> <minutes>"
+    exit 1
+fi
+
 HOSTS_FILE="/etc/hosts"
 WEBSITE=$1
 WWW_WEBSITE="www.$WEBSITE"
@@ -47,6 +52,7 @@ unblock_website() {
 
 flush_dns_cache() {
     killall -HUP mDNSResponder
+    dscacheutil -flushcache
     echo "DNS cache flushed."
 }
 
