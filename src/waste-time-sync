@@ -1,13 +1,5 @@
 #!/bin/bash
 
-sudo echo
-
-if [ $# -lt 2 ]; then
-    echo "Usage: $0 <website> <minutes>"
-    echo "Example: $0 facebook.com 10"
-    exit 1
-fi
-
 HOSTS_FILE="/etc/hosts"
 WEBSITE=$1
 WWW_WEBSITE="www.$WEBSITE"
