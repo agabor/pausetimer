@@ -1,11 +1,11 @@
-# Waste My Time
+# Pause Timer
 
 
 
 ## Install
 
 ```
-curl https://agabor.github.io/waste-my-time/install.sh | sudo bash
+curl https://pausetimer.com/install.sh | sudo bash
 ```
 
 ## Tested on

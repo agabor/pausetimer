@@ -54,14 +54,17 @@ flush_dns_cache() {
     echo "DNS cache flushed."
 }
 
-echo "Temporarily unblocking $WEBSITE and $WWW_WEBSITE for $MINUTES minutes..."
+if (( MINUTES > 0 )); then
+    echo "Temporarily unblocking $WEBSITE and $WWW_WEBSITE for $MINUTES minutes..."
 
-unblock_website
+    unblock_website
 
-reblock_time=$(date -v+${MINUTES}M +"%Y-%m-%d %H:%M:%S")
-echo "The website will be re-blocked at: $reblock_time"
+    reblock_time=$(date -v+${MINUTES}M +"%Y-%m-%d %H:%M:%S")
+    echo "The website will be re-blocked at: $reblock_time"
 
-sleep $TEMP_UNBLOCK_TIME
+    sleep $TEMP_UNBLOCK_TIME
+fi
+
 
 block_website
 

@@ -33,4 +33,4 @@ fi
 
 sudo echo
 
-sudo nohup sudo waste-time-sync "$1" "$2" 2>&1 | tee &
+sudo nohup sudo pausetimer-sync "$1" "$2" 2>&1 | tee &

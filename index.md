@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Waste My Time
+title: Pause Timer
 ---
 
 {% include_relative README.md %}
