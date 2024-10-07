@@ -1,3 +1,4 @@
+```
 Usage: pausetimer [OPTIONS] <website> <minutes>
 
 Options:
@@ -11,3 +12,4 @@ Examples:
   pausetimer --list
   pausetimer --unblock facebook.com
   pausetimer --update
+```
