@@ -4,7 +4,7 @@ description: A brief description of your site.
 theme: jekyll-theme-cayman
 
 # Repository settings (for GitHub Pages)
-repository: agabor/waste-my-time
+repository: agabor/pausetimer
 
 # Social links
 github_username: agabor
