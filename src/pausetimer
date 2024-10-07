@@ -27,11 +27,11 @@ list_blocked_domains() {
 update() {
     BASE_URL="https://pausetimer.com/src/"
     DEST_DIR="/usr/local/bin"
-    curl -o "$DEST_DIR/pausetimer" "$BASE_URL/pausetimer"
+    sudo curl -o "$DEST_DIR/pausetimer" "$BASE_URL/pausetimer"
     echo
-    curl -o "$DEST_DIR/pausetimer-sync" "$BASE_URL/pausetimer-sync"
-    chmod +x "$DEST_DIR/pausetimer"
-    chmod +x "$DEST_DIR/pausetimer-sync"
+    sudo curl -o "$DEST_DIR/pausetimer-sync" "$BASE_URL/pausetimer-sync"
+    sudo chmod +x "$DEST_DIR/pausetimer"
+    sudo chmod +x "$DEST_DIR/pausetimer-sync"
     echo
     echo "Pause Timer update complete."
     exit 0
@@ -43,16 +43,16 @@ for arg in "$@"; do
         --help) show_help;;
         --list) list_blocked_domains;;
         --unblock) sudo pausetimer-sync "$2" "u"; exit 0;;
-        --update) sudo update;;
+        --update) update;;
     esac
 done
 
-while getopts "hlu" flag; do
+while getopts "hlur" flag; do
     case "${flag}" in
         h) show_help;;
         l) list_blocked_domains;;
         u) sudo pausetimer-sync "$2" "u"; exit 0;;
-        r) sudo update;;
+        r) update;;
     esac
 done
 
