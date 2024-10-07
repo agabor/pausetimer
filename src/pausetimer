@@ -5,23 +5,38 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS] <website> <minutes>
 
 Options:
-  -h, --help    Show this help message and exit
+  -h, --help      Show this help message and exit
+  -l, --list      List all blocked domains
+  -u, --unblock   Unblock the specified website
 
 Examples:
   $(basename "$0") facebook.com 10
+  $(basename "$0") --list
+  $(basename "$0") --unblock facebook.com
 EOF
-    exit 1
+    exit 0
 }
+
+list_blocked_domains() {
+    grep 0.0.0.0 /etc/hosts | awk '{ print $2 }'
+    exit 0
+}
+
+WEBSITE=$1
 
 for arg in "$@"; do
     case "$arg" in
         --help) show_help;;
+        --list) list_blocked_domains;;
+        --unblock) pausetimer-sync "$2" "u"; exit 0;;
     esac
 done
 
-while getopts "h" flag; do
+while getopts "hlu" flag; do
     case "${flag}" in
         h) show_help;;
+        l) list_blocked_domains;;
+        u) pausetimer-sync "$2" "u"; exit 0;;
     esac
 done
 

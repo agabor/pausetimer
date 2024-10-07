@@ -9,8 +9,17 @@ HOSTS_FILE="/etc/hosts"
 WEBSITE=$1
 WWW_WEBSITE="www.$WEBSITE"
 MINUTES=$2
+
+if [ $MINUTES = "u" ]; then
+    echo "Unblocking $WEBSITE and $WWW_WEBSITE..."
+    sed -i '' "/$WEBSITE/d" "$HOSTS_FILE"
+    sed -i '' "/$WWW_WEBSITE/d" "$HOSTS_FILE"
+    flush_dns_cache
+    exit 0
+fi
+
 TEMP_UNBLOCK_TIME=$((MINUTES * 60))
-REDIRECT_IP="127.0.0.1"
+REDIRECT_IP="0.0.0.0"
 
 block_website() {
     if ! grep -q "$WEBSITE" "$HOSTS_FILE"; then
