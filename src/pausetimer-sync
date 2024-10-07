@@ -10,6 +10,12 @@ WEBSITE=$1
 WWW_WEBSITE="www.$WEBSITE"
 MINUTES=$2
 
+flush_dns_cache() {
+    killall -HUP mDNSResponder
+    dscacheutil -flushcache
+    echo "DNS cache flushed."
+}
+
 if [ $MINUTES = "u" ]; then
     echo "Unblocking $WEBSITE and $WWW_WEBSITE..."
     sed -i '' "/$WEBSITE/d" "$HOSTS_FILE"
@@ -55,12 +61,6 @@ unblock_website() {
     fi
 
     flush_dns_cache
-}
-
-flush_dns_cache() {
-    killall -HUP mDNSResponder
-    dscacheutil -flushcache
-    echo "DNS cache flushed."
 }
 
 if (( MINUTES > 0 )); then

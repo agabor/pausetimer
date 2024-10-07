@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run this script with sudo."
+    exit 1
+fi
+
 show_help() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS] <website> <minutes>
@@ -8,17 +13,32 @@ Options:
   -h, --help      Show this help message and exit
   -l, --list      List all blocked domains
   -u, --unblock   Unblock the specified website
+  -r, --update    Update Pause Timer
 
 Examples:
   $(basename "$0") facebook.com 10
   $(basename "$0") --list
   $(basename "$0") --unblock facebook.com
+  $(basename "$0") --update
 EOF
     exit 0
 }
 
 list_blocked_domains() {
     grep 0.0.0.0 /etc/hosts | awk '{ print $2 }'
+    exit 0
+}
+
+update() {
+    BASE_URL="https://pausetimer.com/src/"
+    DEST_DIR="/usr/local/bin"
+    curl -o "$DEST_DIR/pausetimer" "$BASE_URL/pausetimer"
+    echo
+    curl -o "$DEST_DIR/pausetimer-sync" "$BASE_URL/pausetimer-sync"
+    chmod +x "$DEST_DIR/pausetimer"
+    chmod +x "$DEST_DIR/pausetimer-sync"
+    echo
+    echo "Pause Timer update complete."
     exit 0
 }
 
@@ -29,6 +49,7 @@ for arg in "$@"; do
         --help) show_help;;
         --list) list_blocked_domains;;
         --unblock) pausetimer-sync "$2" "u"; exit 0;;
+        --update) update;;
     esac
 done
 
@@ -37,6 +58,7 @@ while getopts "hlu" flag; do
         h) show_help;;
         l) list_blocked_domains;;
         u) pausetimer-sync "$2" "u"; exit 0;;
+        r) update;;
     esac
 done
 
